@@ -1,45 +1,60 @@
 ///////////////////////////////
 // DEPENDENCIES
 ////////////////////////////////
-// get .env variables
-require("dotenv").config();
+const mongoose = require('mongoose');
 // pull PORT from .env, give default value of 3000
 // pull MONGODB_URL from .env
-const { PORT = 3000, MONGODB_URL } = process.env;
+const { PORT = 3000 } = process.env;
 // import express
 const express = require("express");
 // create application object
 const app = express();
-// import mongoose
-const mongoose = require("mongoose");
 // import middlware
 const cors = require("cors");
 const morgan = require("morgan");
 
-///////////////////////////////
-// DATABASE CONNECTION
-////////////////////////////////
-// Establish Connection
-mongoose.connect(MONGODB_URL, {
-    useUnifiedTopology: true,
-    useNewUrlParser: true,
-});
-// Connection Events
-mongoose.connection
-    .on("open", () => console.log("Your are connected to mongoose"))
-    .on("close", () => console.log("Your are disconnected from mongoose"))
-    .on("error", (error) => console.log(error));
+//const controllers = require('./controllers')
+const methodOverride = require('method-override');
+const session = require("express-session");
+const MongoStore = require("connect-mongo");
+
 
 ///////////////////////////////
-// MODELS
+/* SECTION DB CONNNECTION */
 ////////////////////////////////
-const PeopleSchema = new mongoose.Schema({
-    name: String,
-    image: String,
-    title: String,
-});
+const dbconnection = require('./config/db.connection');
 
-const People = mongoose.model("People", PeopleSchema);
+app.use(
+    session(
+        {
+            // where to store the sessions in mongodb
+            store: MongoStore.create({ mongoUrl: process.env.MONGODB_URL }),
+
+            // secret key is used to sign every cookie to say its is valid
+            secret: "super secret",
+            resave: false,
+            saveUninitialized: false,
+            // configure the experation of the cookie
+            cookie: {
+                maxAge: 1000 * 60 * 60 * 24 * 7 * 2, // two weeks
+            },
+        }
+    )
+);
+
+// App.use for adding 
+app.use(express.urlencoded({ extended: false }));
+app.use(express.static('public'));
+app.use(methodOverride('_method'))
+
+// app.use('/products', controllers.product)
+// app.use('/', controllers.user)
+
+app.use((req, res, next) => {
+    console.log("I'm running for another new route")
+    console.log(`${req.method} ${req.originalUrl}`);
+    next();
+});
 
 ///////////////////////////////
 // MiddleWare
