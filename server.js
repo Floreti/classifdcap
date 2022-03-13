@@ -4,7 +4,7 @@
 const mongoose = require('mongoose');
 // pull PORT from .env, give default value of 3000
 // pull MONGODB_URL from .env
-const { PORT = 3000 } = process.env;
+const { PORT = 3000 } = process.env;   //another notation: const PORT = process.env.PORT || 3000;
 // import express
 const express = require("express");
 // create application object
@@ -12,6 +12,9 @@ const app = express();
 // import middlware
 const cors = require("cors");
 const morgan = require("morgan");
+
+const req = require("express/lib/request");
+const controllers = require("./controllers");
 
 //const controllers = require('./controllers')
 const methodOverride = require('method-override');
@@ -66,56 +69,7 @@ app.use(express.json()); // parse json bodies
 ///////////////////////////////
 // ROUTES
 ////////////////////////////////
-// create a test route
-app.get("/", (req, res) => {
-    res.send("hello world");
-});
-
-// PEOPLE INDEX ROUTE
-app.get("/people", async (req, res) => {
-    try {
-        // send all people
-        res.json(await People.find({}));
-    } catch (error) {
-        //send error
-        res.status(400).json(error);
-    }
-});
-
-// PEOPLE CREATE ROUTE
-app.post("/people", async (req, res) => {
-    try {
-        // send all people
-        res.json(await People.create(req.body));
-    } catch (error) {
-        //send error
-        res.status(400).json(error);
-    }
-});
-
-// PEOPLE UPDATE ROUTE
-app.put("/people/:id", async (req, res) => {
-    try {
-        // send all people
-        res.json(
-            await People.findByIdAndUpdate(req.params.id, req.body, { new: true })
-        );
-    } catch (error) {
-        //send error
-        res.status(400).json(error);
-    }
-});
-
-// PEOPLE DELETE ROUTE
-app.delete("/people/:id", async (req, res) => {
-    try {
-        // send all people
-        res.json(await People.findByIdAndRemove(req.params.id));
-    } catch (error) {
-        //send error
-        res.status(400).json(error);
-    }
-});
+const routes = require('./routes/routes');
 
 ///////////////////////////////
 // LISTENER
