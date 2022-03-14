@@ -1,25 +1,28 @@
 ///////////////////////////////
 // DEPENDENCIES
 ////////////////////////////////
-const mongoose = require('mongoose');
-// pull PORT from .env, give default value of 3000
-// pull MONGODB_URL from .env
-const { PORT = 3000 } = process.env;   //another notation: const PORT = process.env.PORT || 3000;
 // import express
 const express = require("express");
 // create application object
 const app = express();
+const mongoose = require('mongoose');
+// pull PORT from .env, give default value of 3000
+// pull MONGODB_URL from .env
+const { PORT = 3000 } = process.env;   //another notation: const PORT = process.env.PORT || 3000;
+
 // import middlware
 const cors = require("cors");
 const morgan = require("morgan");
 
 const req = require("express/lib/request");
-const controllers = require("./controllers");
+const controllers = require("./controllers/index");
 
 //const controllers = require('./controllers')
 const methodOverride = require('method-override');
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
+
+
 
 
 ///////////////////////////////
@@ -69,7 +72,64 @@ app.use(express.json()); // parse json bodies
 ///////////////////////////////
 // ROUTES
 ////////////////////////////////
-const routes = require('./routes/routes');
+// create a test route
+app.get("/", (req, res) => {
+    res.send("hello world");
+});
+
+
+/////////////////////////
+//***********
+/////////////////////////
+
+// app.use('/user', controllers.User);
+// app.use('/ad', controllers.Ad);
+
+// Ad INDEX ROUTE
+app.get("/ads", async (req, res) => {
+    try {
+        // send all ads
+        res.json(await Ads.find({}));
+    } catch (error) {
+        //send error
+        res.status(400).json(error);
+    }
+});
+
+// Ads CREATE ROUTE
+app.post("/ads", async (req, res) => {
+    try {
+        // send all Ads
+        res.json(await Ads.create(req.body));
+    } catch (error) {
+        //send error
+        res.status(400).json(error);
+    }
+});
+
+// PEOPLE UPDATE ROUTE
+app.put("/ads/:id", async (req, res) => {
+    try {
+        // send all ads
+        res.json(
+            await Ads.findByIdAndUpdate(req.params.id, req.body, { new: true })
+        );
+    } catch (error) {
+        //send error
+        res.status(400).json(error);
+    }
+});
+
+// Ads DELETE ROUTE
+app.delete("/ads/:id", async (req, res) => {
+    try {
+        // send all ads
+        res.json(await Ads.findByIdAndRemove(req.params.id));
+    } catch (error) {
+        //send error
+        res.status(400).json(error);
+    }
+});
 
 ///////////////////////////////
 // LISTENER

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../models')
 
-
+//index route
 router.get('/', async (req, res, next) => {
 
     try {
@@ -16,34 +16,15 @@ router.get('/', async (req, res, next) => {
     }
 });
 
+//create route
 router.post('/', async (req, res, next) => {
 
     // Start by console logging things out here for the req, then req.body
     try {
-        const createdProduct = await db.Product.create(req.body)
-        console.log(createdProduct);
+        const createdAd = await db.Ad.create(req.body)
+        console.log(createdAd);
 
-        res.redirect("/products");
-    } catch (error) {
-        console.log(error);
-        req.error = error;
-        return next();
-    }
-})
-
-router.get("/new", function (req, res) {
-    res.render("new.ejs")
-})
-
-// show route
-// this route will catch GET requests to /products/index/ and respond with a single product
-router.get('/:productId', async (req, res, next) => {
-    try {
-        const foundProduct = await db.Product.findById(req.params.productId)
-
-        console.log(foundProduct);
-        const context = { product: foundProduct }
-        res.render('show.ejs', context)
+        res.redirect("/");
     } catch (error) {
         console.log(error);
         req.error = error;
@@ -51,12 +32,28 @@ router.get('/:productId', async (req, res, next) => {
     }
 });
 
-router.delete('/:productId', async (req, res, next) => {
+// show route
+// this route will catch GET requests to /products/index/ and respond with a single product
+router.get('/:adId', async (req, res, next) => {
     try {
-        const deletedProduct = await db.Product.findByIdAndDelete(req.params.productId);
+        const foundAd = await db.Ad.findById(req.params.adId)
 
-        console.log(deletedProduct);
-        res.redirect('/products');
+        console.log(foundAd);
+        const context = { ad: foundAd }
+        res.render('Show', context)
+    } catch (error) {
+        console.log(error);
+        req.error = error;
+        return next();
+    }
+});
+
+router.delete('/:adId', async (req, res, next) => {
+    try {
+        const deletedAd = await db.Ad.findByIdAndDelete(req.params.adId);
+
+        console.log(deletedAd);
+        res.redirect('/ads');
     } catch (error) {
         console.log(error);
         req.error = error;
@@ -64,11 +61,11 @@ router.delete('/:productId', async (req, res, next) => {
     }
 })
 
-router.get('/:productId/edit', async (req, res, next) => {
+router.get('/:adId/edit', async (req, res, next) => {
     try {
-        const updatedProduct = await db.Product.findById(req.params.productId);
+        const updatedAd = await db.Ad.findById(req.params.adId);
 
-        console.log(updatedProduct);
+        console.log(updatedAd);
         return res.render('edit.ejs', { product: updatedProduct })
     } catch (error) {
         console.log(error);
