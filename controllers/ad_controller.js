@@ -48,12 +48,13 @@ router.get('/:adId', async (req, res, next) => {
     }
 });
 
+//delete route
 router.delete('/:adId', async (req, res, next) => {
     try {
         const deletedAd = await db.Ad.findByIdAndDelete(req.params.adId);
 
         console.log(deletedAd);
-        res.redirect('/ads');
+        res.redirect('/Ads');
     } catch (error) {
         console.log(error);
         req.error = error;
@@ -61,12 +62,13 @@ router.delete('/:adId', async (req, res, next) => {
     }
 })
 
+//edit route
 router.get('/:adId/edit', async (req, res, next) => {
     try {
         const updatedAd = await db.Ad.findById(req.params.adId);
 
         console.log(updatedAd);
-        return res.render('edit.ejs', { product: updatedProduct })
+        return res.render('Edit', { product: updatedProduct })
     } catch (error) {
         console.log(error);
         req.error = error;
@@ -74,13 +76,14 @@ router.get('/:adId/edit', async (req, res, next) => {
     }
 })
 
-router.put('/:productId', async (req, res, next) => {
+//update route
+router.put('/:adId', async (req, res, next) => {
 
     try {
-        const updatedProduct = await db.Product.findByIdAndUpdate(req.params.productId, req.body);
+        const updatedAd = await db.Ad.findByIdAndUpdate(req.params.adId, req.body);
 
-        console.log(updatedProduct);
-        return res.redirect('/products');
+        console.log(updatedAd);
+        return res.redirect('/Ads');
     } catch (error) {
         console.log(error);
         req.error = error;
