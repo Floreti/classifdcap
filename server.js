@@ -76,24 +76,17 @@ app.use((req, res, next) => {
 ///////////////////////////////
 // MiddleWare
 ////////////////////////////////
-app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header(
-        "Access-Control-Allow-Headers",
-        "Origin, X-Requested-With, Content-Type, Accept"
-    );
-    next();
-});
+// app.use((req, res, next) => {
+//     res.header("Access-Control-Allow-Origin", "*");
+//     res.header(
+//         "Access-Control-Allow-Headers",
+//         "Origin, X-Requested-With, Content-Type, Accept"
+//     );
+//     next();
+// });
 
 
-// app.use(
-//     cors({
-//         origin: "http://localhost:3000",
-//         methods: "GET, POST, PUT, DELETE"
-//     }
-//     )
-// );
-// let whitelist = ['http://localhost:3000']
+// let whitelist = ['http://localhost:3000', 'http://localhost:4000']
 // let corsOptions = {
 //     origin: function (origin, callback) {
 //         if (whitelist.indexOf(origin) !== -1) {
@@ -104,15 +97,11 @@ app.use((req, res, next) => {
 //     }
 // }
 
-// app.use(cors());
+let corsOptions = {
+    origin: "*"
+};
 
-
-// let corsOptions = {
-//     origin: "http://localhost:3000"
-// };
-
-
-
+app.use(cors(corsOptions));
 
 app.use(morgan("dev")); // logging
 app.use(express.json()); // parse json bodies
