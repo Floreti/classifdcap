@@ -1,14 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../models')
+const mongoose = require("mongoose");
 
 //index route
 router.get('/', async (req, res, next) => {
 
     try {
         const ads = await db.Ad.find({});
-        const context = { ads }
-        return res.render('index', context);
+        // const context = { ads }
+        return res.json(ads);
     } catch (error) {
         console.log(error);
         req.error = error;
@@ -18,13 +19,13 @@ router.get('/', async (req, res, next) => {
 
 //create route
 router.post('/', async (req, res, next) => {
-
-    // Start by console logging things out here for the req, then req.body
+console.log(req.body);    // Start by console logging things out here for the req, then req.body
     try {
+        console.log("This is running.");
         const createdAd = await db.Ad.create(req.body)
         console.log(createdAd);
 
-        res.redirect("/");
+        res.json(createdAd);
     } catch (error) {
         console.log(error);
         req.error = error;
@@ -92,3 +93,49 @@ router.put('/:adId', async (req, res, next) => {
 });
 
 module.exports = router;
+
+// // Ad INDEX ROUTE
+// app.get("/", async (req, res) => {
+//     try {
+//         // send all ads
+//         res.json(await Ads.find({}));
+//     } catch (error) {
+//         //send error
+//         res.status(400).json(error);
+//     }
+// });
+
+// // Ads CREATE ROUTE
+// app.post("/Ads", async (req, res) => {
+//     try {
+//         // send all Ads
+//         res.json(await Ads.create(req.body));
+//     } catch (error) {
+//         //send error
+//         res.status(400).json(error);
+//     }
+// });
+
+// // Ads UPDATE ROUTE
+// app.put("/ads/:id", async (req, res) => {
+//     try {
+//         // send all ads
+//         res.json(
+//             await Ads.findByIdAndUpdate(req.params.id, req.body, { new: true })
+//         );
+//     } catch (error) {
+//         //send error
+//         res.status(400).json(error);
+//     }
+// });
+
+// // Ads DELETE ROUTE
+// app.delete("/ads/:id", async (req, res) => {
+//     try {
+//         // send all ads
+//         res.json(await Ads.findByIdAndRemove(req.params.id));
+//     } catch (error) {
+//         //send error
+//         res.status(400).json(error);
+//     }
+// });

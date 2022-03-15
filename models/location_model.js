@@ -5,7 +5,7 @@ const locationSchema = new mongoose.Schema({
         type: Number,
         min: [5, "Please enter a valid Zip code."],
         max: [5, "Please enter a valid Zip code."],
-        required: [true, "Zip Code"],
+        required: [true, "Zip Code, minimum 5 digits long."],
     },
     city: {
         type: String,

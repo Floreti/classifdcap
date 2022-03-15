@@ -14,22 +14,22 @@ const adSchema = new mongoose.Schema({
         required: [true, "Add images to enhance your listing"],
     },
     // relationship to location
-    locations: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Location"
-        }
-    ],
-    // relationship to user
-    user: {
-        type: mongoose.Types.ObjectId,
-        ref: "User",
-    },
-    // relationship to category
-    category: {
-        type: mongoose.Types.ObjectId,
-        ref: "Category",
-    },
+    // locations: [
+    //     {
+    //         type: mongoose.Schema.Types.ObjectId,
+    //         ref: "Location"
+    //     }
+    // ],
+    // // relationship to user
+    // user: {
+    //     type: mongoose.Types.ObjectId,
+    //     ref: "User",
+    // },
+    // // relationship to category
+    // category: {
+    //     type: mongoose.Types.ObjectId,
+    //     ref: "Category",
+    // },
 
 
 },
