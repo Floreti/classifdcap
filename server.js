@@ -21,13 +21,12 @@ const nocache = require('nocache');
 
 const dbconnection = require('./config/db.connection');
 
-const corsOptions = {
-    origin: 'http://localhost:3000'
-};
 
 app.use(bodyParser.urlencoded({
     extended: true
 }));
+
+
 
 app.use(
     session(
@@ -52,8 +51,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static('public'));
 app.use(methodOverride('_method'))
 app.use(nocache());
-app.use('/ads', controllers.Ad)
-// app.use('/', controllers.Ad)
 
 app.use((req, res, next) => {
     console.log(req.body);
@@ -62,10 +59,24 @@ app.use((req, res, next) => {
     next();
 });
 
-///////////////////////////////
+//////////////////////////////
 // MiddleWare
 ////////////////////////////////
+const corsOptions = {
+    // origin: '*',
+    // preflightContinue: false,
+    // credentials: true,
+    // mode: "no-cors"
+};
 app.use(cors(corsOptions));
+
+// app.use(function (req, res, next) {
+//     res.header("Access-Control-Allow-Origin", '*');
+//     res.header("Access-Control-Allow-Credentials", true);
+//     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+//     res.header("Access-Control-Allow-Headers", 'Origin,X-Requested-With,Content-Type,Accept Authorization');
+//     next();
+// });
 app.use(morgan('dev')); // logging
 app.use(express.json()); // parse json bodies
 
@@ -74,9 +85,11 @@ app.use(express.json()); // parse json bodies
 /////////////////////////
 
 app.use('/user', controllers.User);
-app.use('/ad', controllers.Ad);
-app.use('/location', controllers.Location);
-app.use('/category', controllers.Category);
+app.use('/ads', controllers.Ad);
+// app.use('/ads', controllers.Ad)
+// app.use('/', controllers.Ad)
+// app.use('/location', controllers.Location);
+// app.use('/category', controllers.Category);
 
 ///////////////////////////////
 // ROUTES
